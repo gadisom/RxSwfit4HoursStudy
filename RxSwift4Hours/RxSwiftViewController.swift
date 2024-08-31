@@ -33,7 +33,7 @@ class RxSwiftViewController: UIViewController {
         imageView.image = nil
 
         _ = rxswiftLoadImage(from: LARGER_IMAGE_URL)
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe({ result in
                 switch result {
                 case let .next(image):
@@ -50,6 +50,7 @@ class RxSwiftViewController: UIViewController {
 
     @IBAction func onCancel(_ sender: Any) {
         // TODO: cancel image loading
+        
     }
 
     // MARK: - RxSwift
