@@ -29,12 +29,12 @@ class RxSwiftViewController: UIViewController {
 
     // MARK: - IBAction
 
-    var disposable: Disposable? // 새로이 변수를 만들어준다.
+    var disposeBag: DisposeBag = DisposeBag() //새로운걸 만들었다.
     
     @IBAction func onLoadImage(_ sender: Any) {
         imageView.image = nil
 
-        disposable = rxswiftLoadImage(from: LARGER_IMAGE_URL)
+        rxswiftLoadImage(from: LARGER_IMAGE_URL)
             .observe(on: MainScheduler.instance)
             .subscribe({ result in // subscribe 는 disposable 을 반환한다.
                 switch result {
@@ -48,11 +48,12 @@ class RxSwiftViewController: UIViewController {
                     break
                 }
             })
+            .disposed(by: disposeBag) // 리턴되는걸 disposedBag 에 넣어준다.
     }
 
     @IBAction func onCancel(_ sender: Any) {
         // TODO: cancel image loading
-        disposable?.dispose() // 그럼 여기서 취소를 시킬 수 있다.
+        disposeBag = DisposeBag() // 취소시킬 때 새롭게 할당해주면 초기화 시킬 수 있다.
     }
 
     // MARK: - RxSwift
